@@ -15,9 +15,6 @@ li:nth-child(odd) {
 li:nth-child(even) {
 	backgorund: #ffffff;
 }
-h3, p {
-	margin: 0;
-}
 h1 {
 	display: inline;
 }
