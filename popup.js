@@ -57,6 +57,8 @@ if(bookmark_button) {
 }
 
 // break list up to handle individual tabs
+// save all tabs under 'Other bookmarks'
+// TODO - change location
 function bookmark_all(tabs) {
 	console.log("bookmarking", tabs.length, "tabs");
 	let promises = []
