@@ -40,10 +40,39 @@ if(get_button) {
 if(bookmark_button) {
 	bookmark_button.addEventListener("click", () => {
 		let list = document.querySelectorAll("li");
+		let to_book = []
+		
+		// filter out the desired tabs
 		for(const tab of list) {
 			if(tab.querySelector("#flag").checked) {
-				console.log("bm", tab);
+				let tab_data = {}
+				tab_data.url = tab.querySelector(".url").textContent;
+				tab_data.title = tab.querySelector(".title").textContent;
+				to_book.push(tab_data);
 			}
-		}	
+		}
+		
+		bookmark_all(to_book);
+	});
+}
+
+// break list up to handle individual tabs
+function bookmark_all(tabs) {
+	console.log("bookmarking", tabs.length, "tabs");
+	let promises = []
+	for(const tab of tabs)
+		promises.push(bookmark_one(tab));
+	
+	Promise.all(promises)
+		.then(r => console.log("succeeded", r))
+		.catch(e => console.log("failed ", e));
+}
+
+// bookmark utility
+function bookmark_one(tab) {
+	console.log("bookmarking", tab.url);
+	return chrome.bookmarks.create({
+		'url': tab.url,
+		'title': tab.title
 	});
 }
