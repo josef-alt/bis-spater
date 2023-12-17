@@ -21,6 +21,7 @@ if(get_button) {
 						const element = template.content.firstElementChild.cloneNode(true);
 							
 						element.querySelector(".title").textContent = tab.title;
+						element.querySelector(".url").textContent = tab.url;
 						elements.add(element); 
 					}
 					document.querySelector("ul").append(...elements);
@@ -38,6 +39,13 @@ if(get_button) {
 
 if(bookmark_button) {
 	bookmark_button.addEventListener("click", () => {
-		// todo
+		let list = document.querySelectorAll("li");
+		for(const tab of list) {
+			if(tab.querySelector("#flag").checked) {
+				if(parent){
+					console.log("bm", tab);
+				}
+			}
+		}	
 	});
 }
