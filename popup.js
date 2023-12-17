@@ -42,9 +42,7 @@ if(bookmark_button) {
 		let list = document.querySelectorAll("li");
 		for(const tab of list) {
 			if(tab.querySelector("#flag").checked) {
-				if(parent){
-					console.log("bm", tab);
-				}
+				console.log("bm", tab);
 			}
 		}	
 	});
