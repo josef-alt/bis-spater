@@ -1,6 +1,7 @@
 // need to get both buttons at beginning in order to hide/unhide
 const get_button = document.getElementById("get_button");
 const bookmark_button = document.getElementById("bookmark_button");
+const select_all = document.getElementById("selectAll");
 
 chrome.windows.getCurrent(w => {
 	chrome.tabs.query({ windowId: w.id }, function(tabs) {
@@ -28,6 +29,16 @@ chrome.windows.getCurrent(w => {
 });		
 
 get_button.hidden = true;
+
+// toggle all elements based on switch
+// TODO - look into expected behavior of select all
+if(select_all) {
+	select_all.addEventListener("change", (e) => {
+		let list = document.getElementsByTagName("li");
+		for(var tab of list)
+			tab.querySelector("#flag").checked = e.target.checked;
+	});
+}
 
 if(bookmark_button) {
 	bookmark_button.addEventListener("click", () => {
