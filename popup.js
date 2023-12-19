@@ -1,5 +1,4 @@
 // need to get both buttons at beginning in order to hide/unhide
-const get_button = document.getElementById("get_button");
 const bookmark_button = document.getElementById("bookmark_button");
 const select_all = document.getElementById("selectAll");
 
@@ -27,8 +26,6 @@ chrome.windows.getCurrent(w => {
 		}
 	});
 });		
-
-get_button.hidden = true;
 
 // toggle all elements based on switch
 // TODO - look into expected behavior of select all
