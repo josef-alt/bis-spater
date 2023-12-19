@@ -28,7 +28,6 @@ chrome.windows.getCurrent(w => {
 });		
 
 get_button.hidden = true;
-bookmark_button.hidden = false;
 
 if(bookmark_button) {
 	bookmark_button.addEventListener("click", () => {
