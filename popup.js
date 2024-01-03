@@ -58,23 +58,73 @@ if(bookmark_button) {
 
 // break list up to handle individual tabs
 // save all tabs under 'Other bookmarks'
-// TODO - change location
 function bookmark_all(tabs) {
 	console.log("bookmarking", tabs.length, "tabs");
-	let promises = []
-	for(const tab of tabs)
-		promises.push(bookmark_one(tab));
 	
-	Promise.all(promises)
-		.then(r => console.log("succeeded", r))
-		.catch(e => console.log("failed ", e));
+	var pid;
+	getOrCreateFolder()
+		.then(folderId => pid = folderId)
+		.catch(failure => console.log("failed to find and/or create folder"))
+		.finally(function() {		
+			console.log("pid is now", pid);
+			let promises = []
+			for(const tab of tabs)
+				promises.push(bookmark_one(tab, pid));
+			
+			Promise.all(promises)
+				.then(r => console.log("succeeded", r))
+				.catch(e => console.log("failed ", e));
+		});
 }
 
 // bookmark utility
-function bookmark_one(tab) {
-	console.log("bookmarking", tab.url);
+// goes under 'Other bookmarks' if pid resolution fails
+function bookmark_one(tab, pid) {
 	return chrome.bookmarks.create({
+		'parentId': pid,
 		'url': tab.url,
 		'title': tab.title
+	});
+}
+
+// looks for an existing folder and creates one if none is found
+// returns the folder id of 'bis-spater'
+function getOrCreateFolder() {
+	return new Promise((resolve, reject) => {
+		findBookmarkFolder()
+			.then(folderId => resolve(folderId))
+			.catch(failure => {
+				chrome.bookmarks.create({'title': 'bis-spater'})
+					.then(folder => resolve(folder.id))
+					.catch(failure => reject(failure));
+			});
+	});
+}
+
+// search for existing 'bis-spater' folder because folder id's are not
+// constants; consequentially, this also allows the user to move their
+// folder to wherever they wish.
+function findBookmarkFolder() {	
+	return new Promise((resolve, reject) => {
+		chrome.bookmarks.getTree()
+			.then(tree => {
+				let stack = []
+				for(var folder of tree[0].children) {
+					stack.push(folder);
+				}
+				
+				while(stack.length > 0) {
+					const top = stack.pop();
+					if(top.title === 'bis-spater') {
+						resolve(top.id);
+					}
+					if(top.children) {
+						for(var child of top.children) {
+							stack.push(child);
+						}
+					}
+				}
+				reject("failed to locate folder");
+			}).catch(e => console.log("failed to get tree"));
 	});
 }
