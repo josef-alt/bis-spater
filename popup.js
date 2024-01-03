@@ -66,10 +66,10 @@ function bookmark_all(tabs) {
 		.then(folderId => pid = folderId)
 		.catch(failure => console.log("failed to find and/or create folder"))
 		.finally(function() {		
-			console.log("pid is now", pid);
 			let promises = []
-			for(const tab of tabs)
+			for(const tab of tabs) {
 				promises.push(bookmark_one(tab, pid));
+			}
 			
 			Promise.all(promises)
 				.then(r => console.log("succeeded", r))
@@ -125,6 +125,6 @@ function findBookmarkFolder() {
 					}
 				}
 				reject("failed to locate folder");
-			}).catch(e => console.log("failed to get tree"));
+			}).catch(e => reject("failed to get tree"));
 	});
 }
