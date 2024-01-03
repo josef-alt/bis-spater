@@ -5,7 +5,6 @@ const select_all = document.getElementById("selectAll");
 chrome.windows.getCurrent(w => {
 	chrome.tabs.query({ windowId: w.id }, function(tabs) {
 		if(tabs) {
-			
 			// make sure no tabs such as chrome://extensions are included
 			tabs = tabs.filter(t => t.url);
 		
@@ -28,7 +27,6 @@ chrome.windows.getCurrent(w => {
 });		
 
 // toggle all elements based on switch
-// TODO - look into expected behavior of select all
 if(select_all) {
 	select_all.addEventListener("change", (e) => {
 		let list = document.getElementsByTagName("li");
